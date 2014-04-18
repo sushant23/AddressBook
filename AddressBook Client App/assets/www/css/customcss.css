@@ -1,0 +1,358 @@
+.ui-header *{
+	font-size: 25px; !important;
+	color: #000 !important;
+}
+/* Custom Call Icon */
+.ui-li-link-alt{
+	width:20%;
+}
+
+.ui-li-link-alt .ui-btn-inner{
+	position:relative;
+	height:100%;
+	width:100%;
+	
+}
+
+.ui-li-link-alt .ui-btn-inner .ui-btn{
+	position:relative;
+	height:100%;
+	width:100%;
+	top:0;
+	right:0;
+	margin:0;
+}
+
+.ui-icon-customphone{
+	position:relative !important;
+	background:url("../images/phoneicon.png") 50% 50%;
+	background-size: 40% auto;
+	background-repeat:no-repeat;
+	height:100%;
+	width:100%;
+	top:0 !important;
+	margin:0 !important;
+	right:0 !important;
+}
+/* Custom Call Icon end */
+
+/*Custom Index Page ListView*/
+.contactListCountryFlag{
+	display: inline !important;
+	vertical-align: baseline; 
+	padding-left: 5px;
+	height: 20px;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+/*Custom Index Page ListView Finished*/
+
+/* Custom Header */
+.ui-header .ui-title{
+	position:relative;
+	text-align:center;
+	margin:0;
+	line-height:80px;
+}
+
+.ui-header .right-btn{
+	padding-left:20px;
+	padding-right:10px;
+	float:right;
+	display:inline-block;
+	height:100%;
+}
+
+.ui-header .left-btn{
+	float:left;
+	padding-right:5px;
+	padding-left:10px;
+	display:inline-block;
+	height:100%;
+}
+
+.ui-header .left-btn img{
+	height:25px;
+	vertical-align:middle;
+}
+
+.ui-header .right-btn img{
+	height:25px;
+	vertical-align:middle;
+}
+
+.ui-header h5{
+	text-align: left !important;
+}
+#nameHeader{
+	display: inline-block;
+	overflow: hidden;
+	text-overflow:ellipsis;
+  	width: 75%;
+  	vertical-align: top;
+}
+/* Custom Header End */
+
+/*Custom Icons Index Page Panel*/
+.ui-icon-customsync{
+	background: url("../images/sync.png") 50% 50% no-repeat;
+	background-size: 20px 20px;
+	width: 30px;
+	height: 30px;
+	top:35% !important;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	overflow:visible;
+}
+
+.ui-icon-customimportfile{
+	background: url("../images/importfile.png") 50% 50% no-repeat;
+	background-size: 20px 20px;
+	width: 30px;
+	height: 30px;
+	top:35% !important;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	overflow:visible;
+}
+
+.ui-icon-customadd{
+	background: url("../images/addButton.png") 50% 50% no-repeat;
+	background-size: 20px 20px;
+	width: 30px;
+	height: 30px;
+	top:35% !important;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	overflow:visible;
+}
+.ui-icon-customclearlocaldata{
+	background: url("../images/clearlocaldata.png") 50% 50% no-repeat;
+	background-size: 20px 20px;
+	width: 30px;
+	height: 30px;
+	top:35% !important;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	overflow:visible;
+}
+
+.ui-icon-customviewall{
+	background: url("../images/viewall.png") 50% 50% no-repeat;
+	background-size: 20px 20px;
+	width: 30px;
+	height: 30px;
+	top:35% !important;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	overflow:visible;
+}
+
+.ui-icon-customviewbycatagory{
+	background: url("../images/viewbycatagory.png") 50% 50% no-repeat;
+	background-size: 20px 20px;
+	width: 30px;
+	height: 30px;
+	top:35% !important;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	overflow:visible;
+}
+/*Custom Icons Index Page Panel Finished*/
+
+/*Custom DetailsPage Table*/
+#detailsPageTable{
+	width: 100%;
+}
+#detailsPageTable td{
+	width: 50%;
+	border-bottom:2px solid #FFFFFF;
+}
+#detailsPageTable img{
+	height: 40px;
+}
+
+.detailsPageCallMsg td{
+	text-align: center;
+}
+/*Custom DetailsPage Table Finished*/
+
+/*Custom Icons Details Page Panel*/
+.ui-icon-customedit{
+	background: url("../images/edit.png") 50% 50% no-repeat;
+	background-size: 20px 20px;
+	width: 30px;
+	height: 30px;	
+	top:35% !important;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	overflow:visible;
+}
+
+.ui-icon-customdelete{
+	background: url("../images/delete.png") 50% 50% no-repeat;
+	background-size: 20px 20px;
+	width: 30px;
+	height: 30px;
+	top:35% !important;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	overflow:visible;
+}
+/*Custom Icons Details Page Panel Finished*/
+/*Hide Items*/
+.item_hidden{
+	display:none !important;
+}
+/*Hide Items Finished*/
+
+.smallfonts{
+	font-size: .8em !important;
+	padding-left: 5px;
+}
+
+/*Custom Popup Dialog For Call and Message*/ 
+#callMsgDialog{
+	display: inline-block;
+}
+
+#callMsgDialog .ui-grid-a .ui-block-a,#callMsgDialog .ui-grid-a .ui-block-b{
+	vertical-align: middle;
+	text-align: center;
+}
+
+#callMsgDialog img{
+	height:50px;
+}
+
+#callMsgDialog{
+	border-radius: 20px;
+}
+/*Custom Popup Message For Call and Message Finished*/
+
+/*Custom Details Page ListView*/
+.sublist{
+	padding-left: 30px !important;
+}
+
+/*Custom Details Page ListView Finished*/
+
+/*Custom Overlay On image*/
+.imagebefore{
+	position:relative;
+    width:200px;
+    height:200px;
+    overflow: hidden;
+}
+.imagebefore img {
+    width:100%;
+    vertical-align:top;
+}
+.imagebefore:after, .imagebefore:before {
+    position:absolute;
+    opacity:0;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+}
+.imagebefore:after {
+    content:'\A';
+    width:100%; height:100%;
+    top:0; left:0;
+    background:rgba(0,0,0,0);
+}
+.imagebefore:before {
+    width:100%;
+    color:#fff;
+    z-index:1;
+    bottom:0;
+    padding:4px 10px;
+    text-align:center;
+    background:rgba(0,0,0,0);
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+}
+.imagebefore:after, .imagebefore:before {
+    opacity:1;
+}
+
+.image {
+    position:relative;
+    width:200px;
+    height:200px;
+}
+.image img {
+    width:100%;
+    vertical-align:top;
+}
+.image:after, .image:before {
+    position:absolute;
+    opacity:0;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+}
+.image:after {
+    content:'\A';
+    width:100%; height:100%;
+    top:0; left:0;
+    background:rgba(0,0,0,0.6);
+}
+.image:before {
+    content: attr(data-content);
+    width:100%;
+    color:#fff;
+    z-index:1;
+    bottom:0;
+    padding:4px 10px;
+    text-align:center;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+}
+.image:after, .image:before {
+    opacity:1;
+}
+
+/*Custom Ui Panel*/
+.ui-panel {
+	min-height: 5%;
+	width: 70%%;
+	z-index: 500;
+	position: fixed;
+}
+
+/*Custom AutoComplete*/
+.ui-autocomplete{
+	width: 80% !important;
+	height:50%;
+	overflow-x:scroll;
+	overflow-y:hidden;
+}
+
+/*Fixed Header*/
+.ui-fixed-hidden{
+    position: relative !important;
+    top: 0 !important;
+    padding: 0 !important;
+}
+
+.ui-header-fixed{
+    position: fixed !important;
+    top: -1px !important;
+    padding-top: 1px !important;
+}
+
+.ui-header{
+    position: fixed !important;
+    transition-property: none !important;
+	-moz-transition-property: none !important;
+	-webkit-transition-property: none !important;
+	-o-transition-property: none !important;
+}
+/*Fixed Header Finished*/
+
+/*Custom Detail page flag*/
+#detailsPageFlag{
+	height: 1.5em;
+	vertical-align: middle;
+	float:right;
+}
+

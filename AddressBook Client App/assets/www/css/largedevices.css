@@ -1,0 +1,84 @@
+body *{
+	font-size:30px !important;
+}
+input::-webkit-input-placeholder {
+   font-size:30px !important;
+}
+
+input:-moz-placeholder {
+    font-size:30px !important;
+}
+
+/*Custom Details Table*/
+#detailsPageTable img{
+	height: 60px;
+}
+/*Custom Header*/
+.ui-li-heading{
+	padding-bottom: 20px;
+}
+.ui-li-desc{
+	position: relative;
+}
+
+/*.ui-title,.ui-title *{
+	font-size: 30px !important;
+}*/
+.ui-header .ui-title{
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.ui-header .right-btn img{
+	height:80px;
+}
+.ui-header .left-btn img{
+	height:80px;
+}
+/*Custom Header Finished*/
+
+/*Custom Icons Panel*/
+.ui-icon-customsync, .ui-icon-customimportfile, .ui-icon-customadd, .ui-icon-customclearlocaldata, .ui-icon-customviewall, .ui-icon-customedit, .ui-icon-customdelete, .ui-icon-customviewbycatagory{
+	background-size: 40px 40px;
+	width: 45px;
+	height: 45px;
+}
+/*Custom Icon Panel Finished*/
+
+.smallfonts{
+	padding-left: 10px;
+}
+
+/*Custom Popup CallMsg*/
+#callMsgDialog img{
+	height:70px;
+}
+
+/*Custom Overlay on Image*/
+.imagebefore{
+	position:relative;
+    width:400px;
+    height:400px;
+}
+
+.image{
+	position:relative;
+    width:400px;
+    height:400px;
+}
+
+/*Custom Ui Panel*/
+.ui-panel {
+	width:50%;
+}
+
+/*Custom Index Page Listview*/
+.contactListCountryFlag{
+	height: 30px;
+	padding-left: 20px;
+}
+
+/*Custom Details Page Flag*/
+#detailsPageFlag{
+	height: 2em;
+}

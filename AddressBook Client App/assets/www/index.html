@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Address Book</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        
+        <!-- FontAwesome - http://fortawesome.github.io/Font-Awesome/ -->
+        <link rel="stylesheet" href="nativedroid/css/font-awesome.min.css" />
+
+        <!-- jQueryMobileCSS - original without styling -->
+        <link rel="stylesheet" href="nativedroid/css/jquerymobile.css" />
+
+        <!-- nativeDroid core CSS -->
+        <link rel="stylesheet" href="nativedroid/css/jquerymobile.nativedroid.css" />
+
+        <!-- nativeDroid: Light/Dark -->
+        <link rel="stylesheet" href="nativedroid/css/jquerymobile.nativedroid.light.css"  id='jQMnDTheme' />
+
+        <!-- nativeDroid: Color Schemes -->
+        <link rel="stylesheet" href="nativedroid/css/jquerymobile.nativedroid.color.blue.css" id='jQMnDColor' />
+
+        <link rel="stylesheet" href="jQuerymobile/jquery-ui.css" />
+  
+        <link rel="stylesheet" href="css/customcss.css" />
+
+        <!-- CSS for Large Devices -->
+        <link rel="stylesheet" type="text/css" media="screen and (min-width:750px)" href="css/largedevices.css" />
+    </head>
+    <body>
+        <!-- Index Page -->
+        <div data-role="page" id="index" data-theme = "b">
+            
+            <!-- Panel Index Page -->
+            <div data-role="panel" id="indexPagePanel" data-theme="b" data-position="right" data-display="overlay" data-animate="false">
+                <ul data-role="listview">
+                    <li data-icon="customadd" ><a href="#addPage">Add</a></li>
+                    <li data-icon="customviewall" id="showAllContacts" class="item_hidden"><a onclick="populateContactList();">Show All Contacts</a></li>
+                    <li data-icon="customviewbycatagory"><a onclick="catagoryButtonClick();">View By Catagory</a></li>
+                    <li data-icon="customsync" id="syncButton"><a href="#" onclick="syncWithServer();">Resync</a></li>
+                    <li data-icon="customclearlocaldata"><a href="#" onclick="clearLocalData();">Clear Local Data</a></li>
+                    <li data-icon="customimportfile" id='importFileButton'><a href="#" onclick="importFromFile();">Import File</a></li>
+                </ul>
+            </div>
+            <!-- Index Page Panel Finished -->
+
+            <!-- Index Page Header -->
+            <div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
+            
+                <h1> 
+                    <a id="backButtonIndexPage" class='item_hidden' onclick="indexPageBackBtnClick();">
+                        <div class="left-btn">
+                            <img src="images/back.png">
+                        </div>
+                    </a>
+                    Contacts 
+                    <a href="#indexPagePanel">
+                        <div class="right-btn">
+                            <img src="images/ellipsisvertical.png">
+                        </div>
+                    </a>
+                </h1>
+
+            </div>
+            <!-- Index Page Header Finished -->
+            
+            <!-- Index Page Content -->
+            <div data-role="content">
+                <!-- Index Page Choose Catagory Popup -->
+                <div data-role="popup" id="chooseCatagory" class="ui-corner-all">
+                    <h1><strong>Choose Catagory</strong></h1>
+                    <div data-role="navbar">
+                        <ul>
+                            <li><a href="#" id = "chooseByPGroup" onclick="viewCounGrp(this);" data-icon="group">Groups</a></li>
+                            <li><a href="#" id = "chooseByCountry" onclick="viewCounGrp(this);" data-icon="globe">Country</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Index Page Choose Catogory Popup Finished -->
+                
+                <!-- Index Page Input Password Popup -->
+                <div data-role="popup" id="inputPasswordPopup" class="ui-corner-all">
+                    <input id="password" type="password" placeholder="Enter Password"/>
+                    <div id="passwordBtn" data-role="button" data-mini="true">Done</div>
+                </div>
+                <!-- Index Page Input Password Popup Finished -->
+                
+                <ul data-role="listview" id="contactList" data-filter="true"
+                data-filter-placeholder="Search Contacts" data-icon="false"
+                data-split-icon="customphone">
+                </ul>
+            </div>
+            <!-- Index Page Content Finished -->
+            <div data-position="fixed" data-tap-toggle="false" data-role="footer" data-tap-toggle="false" class="item_hidden" id="showAllContactsFooter" data-theme='b'>
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#" data-icon="false" onclick="populateContactList();">Show All Contacts</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Index Page Finished -->
+
+        <!-- Add Page -->
+        <div data-role="page" id="addPage" data-theme="b">
+            
+            <!-- Add Page Header -->
+            <div data-role="header" data-position='fixed' data-theme="b">
+                <h1>
+                    <a href="#index">
+                        <div class="left-btn">
+                            <img src="images/back.png">
+                        </div>
+                    </a>
+                    Add Contact 
+                    <a onclick="addFormData();">
+                        <div class="right-btn">
+                            <img src="images/save.png">
+                        </div>
+                    </a>
+                </h1>
+            </div>
+            <!-- Add Page Header Finished -->
+            
+            <!-- Add Page Content -->
+            <div data-role="content">
+                <form id="addForm">
+                    <div data-content="Tap to Change" class="image" onclick="loadImageAdd();"><img class="previewer"  src=""/>
+                    </div>`
+                    <input type="text" placeholder="First Name..." name="firstName" id="firstName" />
+                    <input type="text" placeholder="Middle Name..." name="middleName" id="middleName" /> 
+                    <input type="text" placeholder="Last Name..." name="lastName" id="lastName" /> 
+                    <input type="text" placeholder="Address..." name="address" id="address" /> 
+                    <input type="text" placeholder="Country..." name="country" id="country" />
+                    <input type="text" placeholder="Project Group..." name="projectGroup" id="projectGroup" />
+                    <input type="email" placeholder="Official Email" name="officialEmail" id="officialEmail" />
+                    <input type="email" placeholder="Personal Email" name="personalEmail" id="personalEmail" />
+                    <input type="tel" placeholder="Mobile Number..." name="mobilePhoneA" id="mobilePhoneA" /> 
+                    <input type="tel" placeholder="Alternate Mobile Number..." name="mobilePhoneB" id="mobilePhoneB" /> 
+                    <input type="tel" placeholder="Home Phone Number..." name="homePhoneA" id="homePhoneA" /> 
+                    <input type="tel" placeholder="Alternate Home Number..." name="homePhoneB" id="homePhoneB" /> 
+                    <input type="tel" placeholder="Emergency Number" name="emergencyPhoneA" id="emergencyPhoneA" /> 
+                    <input type="tel" placeholder="Alternate Emergency Number" name="emergencyPhoneB" id="emergencyPhoneB" />
+                    <input type="text" placeholder="Blood Group" name="bloodGroup" id="bloodGroup" />
+                    <input type="text" placeholder="Birth Day" name="birthDay" id="birthDay" /> 
+                    
+                </form>
+            </div>
+            <!-- Add Page Content Finished -->
+        
+        </div>
+        <!-- Add Page Finished -->
+        
+        <!-- Details Page -->
+        <div data-role="page" id="detailsPage" data-theme="b">
+            
+            <!-- Details Page Panel -->
+            <div data-role="panel" id="detailsPagePanel" data-theme="b" data-position="right" data-display="overlay" data-animate="false">
+                <ul data-role="listview">
+                    <li data-icon="customedit"><a onclick="editDetails();">Edit</a></li>
+                    <li data-icon="customdelete"><a onclick="deleteDetails()">Delete</a></li>
+                </ul>
+            </div>
+            <!-- Details Page Panel Finished -->
+
+            
+
+            <!-- Details Page Header -->
+            <div data-role="header" data-position='fixed' data-theme="b">
+                <h5>
+                    <a href="#index" id="detailsPageBackButton">
+                        <div class="left-btn"><img src="images/back.png"></div><span id="nameHeader"></span> 
+                    </a>
+                    <a id="cancelButton" class='item_hidden'onclick="populateDetails();">
+                        <div class="left-btn">
+                            <img src="images/back.png">
+                        </div>
+                        Edit Details
+                    </a>
+                    
+                    <a href="#detailsPagePanel" id="detailsPageOption">
+                        <div class="right-btn">
+                            <img src="images/ellipsisvertical.png">
+                        </div>
+                    </a>
+                    <a id="saveButton" class='item_hidden'onclick="saveEditedData();">
+                        <div class="right-btn">
+                            <img src="images/save.png">
+                        </div>
+                    </a>
+                </h5>
+            </div>
+            <!-- Details Page Header Finished-->
+
+            <!-- Details Page Content -->
+            <div data-role="content">
+                <!-- Call or Message Dialog -->
+                <div data-role="popup" id="callMsgDialog" class="ui-corner-all">
+                    <h1><strong>Choose Option</strong></h1>
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a"></div>
+                        <div class="ui-block-b"></div>
+                    </div>
+                </div>
+                <!-- Call or Message Dialog Finished -->
+                <div data-content="Tap to Change" id='detailsImageDiv' class='imagebefore'>
+                    <img src='' id="detailsImage"/>
+                </div>
+                <ul data-role="listview" id="detailsPageListView">
+
+                </ul>
+                <table cellspacing="20" id="detailsPageTable" class="item_hidden">
+                    <tr>
+
+                    </tr>
+                    <tr>
+                        <td>First Name </td>
+                        <td id="dataFirstName"></td>
+                    </tr>
+                    <tr>
+                        <td>Middle Name </td>
+                        <td id="dataMiddleName"></td>
+                    </tr>
+                    <tr>
+                        <td>Last Name </td>
+                        <td id="dataLastName"></td>
+                    </tr>
+                    <tr>
+                        <td>Address </td>
+                        <td id="dataAddress"></td>
+                    </tr>
+                    <tr>
+                        <td>Country </td>
+                        <td id="dataCountry"></td>
+                    </tr>
+                    <tr>
+                        <td>Project Group </td>
+                        <td id="dataProjectGroup"></td>
+                    </tr>
+                    <tr>
+                        <td>Official Email </td>
+                        <td id="dataOfficialEmail"></td>
+                    </tr>
+                    <tr>
+                        <td>Personal Email </td>
+                        <td id="dataPersonalEmail"></td>
+                    </tr>
+                    <tr>
+                        <td>Mobile Number </td>
+                        <td id="dataMobilePhoneA"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td >Alt. Mobile Number </td>
+                        <td id="dataMobilePhoneB"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td >Emergency Number </td>
+                        <td id="dataEmergencyPhoneA"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td >Alt. Emergency Number </td>
+                        <td id="dataEmergencyPhoneB"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td >Home Number</td>
+                        <td id="dataHomePhoneA"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td >Alt. Home Number </td>
+                        <td id="dataHomePhoneB"></td>
+                    </tr>
+                    
+                    </tr>
+                    <tr>
+                        <td >Blood Group </td>
+                        <td id="dataBloodGroup"></td>
+                    </tr>
+                    </tr><tr>
+                        <td >Birth Day </td>
+                        <td id="dataBirthDay"></td>
+                    </tr> 
+                    
+                </table>
+                <input type="hidden" id="serverId" />
+                <input type="hidden" id="idHolder" />
+
+            </div>
+            <!-- Details Page Content Finished-->
+        
+        </div>
+        <!-- Details Page Finished -->
+
+        <!-- Catagory Page -->
+        <div data-role="page" id="catagoryPage" data-theme="b">
+            <!-- Catagory Page Header -->
+            <div data-position="fixed" data-role="header" data-theme="b">
+                <h1>
+                    <a data-rel="back">
+                        <div class="left-btn">
+                            <img src="images/back.png">
+                        </div>
+                    </a>
+                    Select Catagory
+                </h1>
+            </div>
+            <!-- Catogory Page Header Finished -->
+            
+            <div data-role="content" data-theme="b">
+                <ul data-role="listview" id="catagoryPageListview" data-theme="b"></ul> 
+            </div>
+        </div>
+        <!-- Catagory Page Finished -->
+        
+        <script type="text/javascript" src="cordova.js"></script>
+        <!-- jQuery / jQueryMobile Scripts -->
+        <script src="jQuerymobile/jquery-1.9.1.js"></script>
+        <script src="jQuerymobile/jquery.mobile-1.3.2.js"></script>
+        <script src="jQuerymobile/jquery-ui.js"></script>
+        <!--  -->
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/common.js"></script>
+        <script type="text/javascript" src="js/add.js"></script>
+        <script type="text/javascript" src="js/image.js"></script>
+        <script type="text/javascript" src="js/importcontacts.js"></script>
+        <script type="text/javascript">
+            app.initialize();
+        </script>
+    </body>
+</html>
