@@ -1,0 +1,88 @@
+8
+
+dir
+2911
+svn://kathmandu/ProcitDevProjects/AddressBookProject/AddressBookApp/assets/www/js
+svn://kathmandu/ProcitDevProjects
+
+
+
+2014-04-10T12:12:48.691359Z
+2911
+bkshrestha
+
+
+svn:special svn:externals svn:needs-lock
+
+index.js
+file
+2934
+
+
+
+2014-04-29T12:47:07.343750Z
+4c22d698d51fe8bec79cccf343e8ef24
+2014-04-30T05:32:07.753859Z
+2934
+bkshrestha
+
+add.js
+file
+2924
+
+
+
+2014-04-17T08:53:00.484375Z
+556ae21af219ff9150806a12f0e81df3
+2014-04-17T08:59:37.878859Z
+2924
+bkshrestha
+
+common.js
+file
+2935
+
+
+
+2014-04-30T06:36:25.031250Z
+af3779d306e6fc227969e3acffe4b297
+2014-04-30T06:58:54.627639Z
+2935
+bkshrestha
+
+importcontacts.js
+file
+2935
+
+
+
+2014-04-30T06:47:46.265625Z
+9207df582bd4d83ad69ca46659a2b3e2
+2014-04-30T06:58:54.627639Z
+2935
+bkshrestha
+
+config.xml
+file
+
+
+
+
+2014-04-03T10:31:54.375000Z
+92109fb3ce9224c02abf4c13d606f98f
+2014-04-10T12:12:48.691359Z
+2911
+bkshrestha
+
+image.js
+file
+2932
+
+
+
+2014-04-28T07:06:58.906250Z
+c84251903f88c5fad7ba5d26c8694c0b
+2014-04-28T09:26:16.956984Z
+2932
+bkshrestha
+

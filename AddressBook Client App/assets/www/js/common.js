@@ -1,6 +1,12 @@
-var server = 'http://192.168.100.45:8080/webServiceForAB/';
+var server = 'http://192.168.100.2:8080/webServiceForAB/';
 var PASSWORD = 'adminpassword';
+var filterCountryName = "notDefined";
+var filterGroupName = "notDefined";
+var checkedCountry = "none";
+var checkedGroup = "none";
 var deletableIds = [];
+var clearDataBool;
+var projectGroups, countries;
 if (typeof(localStorage.timeDiff) == 'undefined') {
 	localStorage.timeDiff = '0';
 }
@@ -9,14 +15,14 @@ if (typeof localStorage.lastSynced === 'undefined' || localStorage.lastSynced ==
 }
 var viewByCatagory = false;
 // On Menu Button Press
-function menuButtonClickHandler(){
+function menuButtonClickHandler() {
 	if ($.mobile.activePage.is('#index')) {
-		if( $("#indexPagePanel").hasClass("ui-panel-open") == true )
+		if ($("#indexPagePanel").hasClass("ui-panel-open") == true)
 			$("#indexPagePanel").panel("close");
 		else
 			$("#indexPagePanel").panel("open");
 	} else if ($.mobile.activePage.is('#detailsPage')) {
-		if( $("#detailsPagePanel").hasClass("ui-panel-open") == true )
+		if ($("#detailsPagePanel").hasClass("ui-panel-open") == true)
 			$("#detailsPagePanel").panel("close");
 		else
 			$("#detailsPagePanel").panel("open");
@@ -25,30 +31,45 @@ function menuButtonClickHandler(){
 
 //On Back Button Press
 function onBack() {
+
 	if ($.mobile.activePage.is('#index')) {
+		if ($("#indexPagePanel").hasClass("ui-panel-open") == true) {
+			$("#indexPagePanel").panel("close");
+		} else if($.mobile.activePage.find(".ui-popup").parent().hasClass("ui-popup-active")){
+			$('.ui-popup').popup('close');
+		} else {
 			navigator.notification.confirm(
-			'Are you sure you want to exit?',
-			function(buttonIndex) {
-				if(buttonIndex == '1')
-					navigator.app.exitApp();
-			},
-			'Exit', ['Yes', 'No']
-		);
-		
+				'Are you sure you want to exit?',
+				function(buttonIndex) {
+					if (buttonIndex == '1')
+						navigator.app.exitApp();
+				},
+				'Exit', ['Yes', 'No']
+			);
+		}
+
+	} else if ($.mobile.activePage.is('#detailsPage')) {
+		if ($("#detailsPagePanel").hasClass("ui-panel-open") == true)
+			$("#detailsPagePanel").panel("close");
+		else {
+			navigator.app.backHistory();
+			image = "";
+		}
 	} else {
 		navigator.app.backHistory();
-		image = defaultimg;
+		image = "";
 	}
+
 }
 
 // On Online Function
-function onOnline(){
+function onOnline() {
 	$('#syncButton').show();
 	$('#importFileButton').show();
 }
 
 // On Offline Function
-function onOffline(){
+function onOffline() {
 	$('#syncButton').hide();
 	$('#importFileButton').hide();
 }
@@ -116,18 +137,31 @@ function populateContactList(obj) {
 	createTable();
 	var query;
 	var id;
-	if($.type(obj) == "undefined"){
-		viewByCatagory = false;
-		$("#showAllContacts").addClass("item_hidden");
+	if ($.type(obj) == "undefined") {
+		/*viewByCatagory = false;*/
+		/*$("#showAllContacts").addClass("item_hidden");*/
 		query = 'SELECT * FROM INFO WHERE dateDeleted IS NULL ORDER BY firstName,middleName,lastName ASC';
+		checkedGroup = "none";
+		checkedCountry = "none";
 	} else {
-		id = $(obj).attr('id');
+		/*id = $(obj).attr('id');
 		viewByCatagory = true;
 		$("#showAllContacts").removeClass("item_hidden");
-		if(id.indexOf("Group") != -1) {
-			query = 'SELECT * FROM INFO WHERE dateDeleted IS NULL AND projectGroup ="'+$(obj).prev().val()+'" ORDER BY firstName,middleName,lastName ASC';
-		} else if ( id.indexOf("Country") != -1 ) {	
-			query = 'SELECT * FROM INFO WHERE dateDeleted IS NULL AND country = "'+$(obj).prev().val()+'" ORDER BY firstName,middleName,lastName ASC';
+		if (id.indexOf("Group") != -1) {
+			query = 'SELECT * FROM INFO WHERE dateDeleted IS NULL AND projectGroup ="' + $(obj).prev().val() + '" ORDER BY firstName,middleName,lastName ASC';
+		} else if (id.indexOf("Country") != -1) {
+			query = 'SELECT * FROM INFO WHERE dateDeleted IS NULL AND country = "' + $(obj).prev().val() + '" ORDER BY firstName,middleName,lastName ASC';
+		}*/
+		if(obj.filterGroupName == "notDefined" && obj.filterCountryName == "notDefined"){
+			query = 'SELECT * FROM INFO WHERE dateDeleted IS NULL ORDER BY firstName,middleName,lastName ASC';
+		} else {
+			if(obj.filterGroupName == "notDefined"){
+				query = 'SELECT * FROM INFO WHERE dateDeleted IS NULL AND country ="' + obj.filterCountryName + '" ORDER BY firstName,middleName,lastName ASC';
+			} else if (obj.filterCountryName == "notDefined"){
+				query = 'SELECT * FROM INFO WHERE dateDeleted IS NULL AND projectGroup ="' + obj.filterGroupName + '" ORDER BY firstName,middleName,lastName ASC';
+			} else {
+				query = 'SELECT * FROM INFO WHERE dateDeleted IS NULL AND projectGroup ="' + obj.filterGroupName + '" AND country = "'+obj.filterCountryName+'"ORDER BY firstName,middleName,lastName ASC';
+			}
 		}
 	}
 
@@ -137,6 +171,7 @@ function populateContactList(obj) {
 			var len = results.rows.length;
 			for (var i = 0; i < len; i++) {
 				var row = results.rows.item(i);
+				var mobileNumber="",email="";
 				if (row["mobilePhoneA"] != '0' && row["mobilePhoneA"] != null && row["mobilePhoneA"] != '')
 					mobileNumber = row["mobilePhoneA"];
 				else if (row["mobilePhoneB"] != '0' && row["mobilePhoneB"] != null && row["mobilePhoneB"] != '')
@@ -151,16 +186,22 @@ function populateContactList(obj) {
 					mobileNumber = row["emergencyPhoneB"];
 				else
 					mobileNumber = '';
-
-				var htmlData = '<li data-icon="false" id="' + row["localId"] + '"><a onclick = "populateDetails(this);"><img src="' + row["image"] + '"/><h2>' + row["firstName"] + '</h2><p>' + mobileNumber + '<img src="" id="contactListCountry'+row["localId"]+'" class="contactListCountryFlag"/></p></a><a href="" onclick="callIndexPage(this);"></a></li>';
-				$("#contactList").append(htmlData).listview('refresh');
-				if(row["country"].toUpperCase() == 'NEPAL'){
-					$('#contactListCountry'+row["localId"]).attr('src','images/nepal.png');
-				} else if(row["country"].toUpperCase() == 'INDIA'){
-					$('#contactListCountry'+row["localId"]).attr('src','images/india.png');
-				} else if(row["country"].toUpperCase() == 'NETHERLANDS'){
-					$('#contactListCountry'+row["localId"]).attr('src','images/netherlands.png');
+				if(row["officialEmail"] != null && row["officialEmail"] != ''){
+					email = row["officialEmail"];
+				} else if (row["personalEmail"] != null && row["personalEmail"] != ''){
+					email = row["personalEmail"];
 				}
+				/*var htmlData = '<li data-icon="false" id="' + row["localId"] + '"><a onclick = "populateDetails(this);"><img src="' + row["image"] + '"/><h2>' + row["firstName"] + '</h2><p>' + mobileNumber + '<img src="" id="contactListCountry' + row["localId"] + '" class="contactListCountryFlag"/></p></a><a href="" onclick="callIndexPage(this);"></a></li>';*/
+				htmlData = '<li onclick = "populateDetails(this) "data-icon="false" id="' + row["localId"] + '"><div class="ui-grid-a"><div class="ui-block-a ui-grid-a per90block"><div class="ui-block-a per35block indexPageImageContainer"><img src="'+setImage(row["image"])+'" class="contactListImage"/></div><div class="indexPageNameContainer ui-block-b per65block">'+row["firstName"]+row["middleName"]+row["lastName"]+'<br /><span class="phoneBtnIndexPage">'+mobileNumber+'</span><br/><span class="emailIndexPage">'+email+'</span></div></div><div class="ui-block-b per10block"><img src="" id="contactListCountry' + row["localId"] + '" class="contactListCountryFlag"/></div></div></li>'
+				$("#contactList").append(htmlData).listview('refresh');
+				if (row["country"].toUpperCase() == 'NEPAL') {
+					$('#contactListCountry' + row["localId"]).attr('src', 'images/nepal.png');
+				} else if (row["country"].toUpperCase() == 'INDIA') {
+					$('#contactListCountry' + row["localId"]).attr('src', 'images/india.png');
+				} else if (row["country"].toUpperCase() == 'NETHERLANDS') {
+					$('#contactListCountry' + row["localId"]).attr('src', 'images/netherlands.png');
+				} else
+					$('#contactListCountry' + row["localId"]).attr('src', 'images/globe.png');
 				$("#contactList").listview('refresh');
 				$("#indexPagePanel").panel("close");
 			}
@@ -178,7 +219,7 @@ function errorCB(err) {
 function populateDetails(list) {
 	var id;
 	if ($.type(list) == 'object')
-		id = $(list).closest('li').attr('id');
+		id = $(list).attr('id');
 	else if ($.type(list) == 'string')
 		id = list;
 	else
@@ -194,79 +235,82 @@ function populateDetails(list) {
 					$("#idHolder").val(id);
 					var row = results.rows.item(0);
 					$("#serverId").val(row["serverId"]);
-					$("#detailsImage").attr('src', row['image']);
+					$("#detailsImage").attr('src', setImage(row['image']));
 					$("#nameHeader").html(
-						""+ row['firstName'] + " " + row['middleName'] + " " +row['lastName'] + ""
+						"" + row['firstName'] + " " + row['middleName'] + " " + row['lastName'] + ""
 
-					)
+					);
 					/*Populate Country*/
 					$("#detailsPageListView").html('');
-					if(!(row['address'] == '' || typeof(row['address']) == 'undefined' || row['address'] == null  )){
-						if(!(row['country'] == '' || typeof(row['country']) == 'undefined' || row['country'] == null  )){
-							$("#detailsPageListView").append("<li><span>"+row['address']+", "+row['country']+"<img id='detailsPageFlag' height=60/></span></li>");
-						}else{
-							$("#detailsPageListView").append("<li>"+row['address']+"</li>");
+					if (!(row['address'] == '' || typeof(row['address']) == 'undefined' || row['address'] == null)) {
+						if (!(row['country'] == '' || typeof(row['country']) == 'undefined' || row['country'] == null)) {
+							$("#detailsPageListView").append("<li><span>" + row['address'] + ", " + row['country'] + "<img id='detailsPageFlag' height=60/></span></li>");
+						} else {
+							$("#detailsPageListView").append("<li>" + row['address'] + "</li>");
 						}
-					}else if(!(row['country'] == '' || typeof(row['country']) == 'undefined' || row['country'] == null  )){
-						$("#detailsPageListView").append("<li><span>"+row['country']+"<img id='detailsPageFlag' height=60/></span></li>");
+					} else if (!(row['country'] == '' || typeof(row['country']) == 'undefined' || row['country'] == null)) {
+						$("#detailsPageListView").append("<li><span>" + row['country'] + "<img id='detailsPageFlag' height=60/></span></li>");
 					}
-					if(row['country'].toUpperCase() == 'NEPAL')
-						$("#detailsPageFlag").attr("src","images/nepal.png");
-					else if(row['country'].toUpperCase() == 'INDIA')
-						$("#detailsPageFlag").attr("src","images/india.png");
-					else if(row['country'].toUpperCase() == 'NETHERLANDS')
-						$("#detailsPageFlag").attr("src","images/netherlands.png");
+					if (row['country'].toUpperCase() == 'NEPAL')
+						$("#detailsPageFlag").attr("src", "images/nepal.png");
+					else if (row['country'].toUpperCase() == 'INDIA')
+						$("#detailsPageFlag").attr("src", "images/india.png");
+					else if (row['country'].toUpperCase() == 'NETHERLANDS')
+						$("#detailsPageFlag").attr("src", "images/netherlands.png");
+					else{
+						$("#detailsPageFlag").attr("src", "images/globe.png");
+					}
 					/*Populate Country Finished*/
-					if(!(row['projectGroup'] == '' || typeof(row['projectGroup']) == 'undefined' || row['projectGroup'] == null  ))
-						$("#detailsPageListView").append("<li>Project Group:&nbsp;&nbsp;<span>"+row['projectGroup']+"</span>");
+					if (!(row['projectGroup'] == '' || typeof(row['projectGroup']) == 'undefined' || row['projectGroup'] == null))
+						$("#detailsPageListView").append("<li>Project Group:&nbsp;&nbsp;<span>" + row['projectGroup'] + "</span>");
 
 					/*Populate Email Addresses*/
-					if((row['officialEmail'] != '' && typeof(row['officialEmail']) != 'undefined' &&  row['officialEmail'] != null) || (row['personalEmail'] != '' && typeof(row['personalEmail']) != 'undefined' &&  row['personalEmail'] != null)){
+					if ((row['officialEmail'] != '' && typeof(row['officialEmail']) != 'undefined' && row['officialEmail'] != null) || (row['personalEmail'] != '' && typeof(row['personalEmail']) != 'undefined' && row['personalEmail'] != null)) {
 						$("#detailsPageListView").append("<li data-role='list-divider'><strong>Email</strong></li>");
-						if(row['officialEmail'] != '' && typeof(row['officialEmail']) != 'undefined' &&  row['officialEmail'] != null){
-							$("#detailsPageListView").append("<li class='sublist'><span><a href='mailto:"+row['officialEmail']+"'>"+row['officialEmail']+"</a></span><span class='smallfonts'>(office)</span></li>");
+						if (row['officialEmail'] != '' && typeof(row['officialEmail']) != 'undefined' && row['officialEmail'] != null) {
+							$("#detailsPageListView").append("<li class='sublist'><span><a href='mailto:" + row['officialEmail'] + "'>" + row['officialEmail'] + "</a></span><span class='smallfonts'>(office)</span></li>");
 						}
-						if(row['personalEmail'] != '' && typeof(row['personalEmail']) != 'undefined' &&  row['personalEmail'] != null){
-							$("#detailsPageListView").append("<li class='sublist'><span><a href='mailto:"+row['personalEmail']+"'>"+row['personalEmail']+"</a></span><span class='smallfonts'>(personal)</span></li>");
+						if (row['personalEmail'] != '' && typeof(row['personalEmail']) != 'undefined' && row['personalEmail'] != null) {
+							$("#detailsPageListView").append("<li class='sublist'><span><a href='mailto:" + row['personalEmail'] + "'>" + row['personalEmail'] + "</a></span><span class='smallfonts'>(personal)</span></li>");
 						}
 					}
 					/*Populate Email Address Finished*/
 
 					/*Populate Mobile Numbers*/
 					$("#detailsPageListView").append("<li data-role='list-divider'><strong>Phone</strong></li>");
-					if((row['mobilePhoneA'] != '' && typeof(row['mobilePhoneA']) != 'undefined' &&  row['mobilePhoneA'] != null)){	
-						$("#detailsPageListView").append("<li class='sublist'><span><a onclick='callMsgPopup(this);'>"+row['mobilePhoneA']+"</a></span><span class='smallfonts'>(mobile)</span></li>");
+					if ((row['mobilePhoneA'] != '' && typeof(row['mobilePhoneA']) != 'undefined' && row['mobilePhoneA'] != null)) {
+						$("#detailsPageListView").append("<li class='sublist'><span><a onclick='callMsgPopup(this);'>" + row['mobilePhoneA'] + "</a></span><span class='smallfonts'>(mobile)</span></li>");
 					}
 
-					if((row['mobilePhoneB'] != '' && typeof(row['mobilePhoneB']) != 'undefined' &&  row['mobilePhoneB'] != null)){	
-						$("#detailsPageListView").append("<li class='sublist'><span><a onclick='callMsgPopup(this);'>"+row['mobilePhoneB']+"</a></span><span class='smallfonts'>(mobile)</span></li>");
+					if ((row['mobilePhoneB'] != '' && typeof(row['mobilePhoneB']) != 'undefined' && row['mobilePhoneB'] != null)) {
+						$("#detailsPageListView").append("<li class='sublist'><span><a onclick='callMsgPopup(this);'>" + row['mobilePhoneB'] + "</a></span><span class='smallfonts'>(mobile)</span></li>");
 					}
 
-					if((row['homePhoneA'] != '' && typeof(row['homePhoneA']) != 'undefined' &&  row['mobilePhoneB'] != null)){	
-						$("#detailsPageListView").append("<li class='sublist'><span><a onclick='callMsgPopup(this);'>"+row['homePhoneA']+"</a></span><span class='smallfonts'>(home)</span></li>");
+					if ((row['homePhoneA'] != '' && typeof(row['homePhoneA']) != 'undefined' && row['mobilePhoneB'] != null)) {
+						$("#detailsPageListView").append("<li class='sublist'><span><a onclick='callMsgPopup(this);'>" + row['homePhoneA'] + "</a></span><span class='smallfonts'>(home)</span></li>");
 					}
 
-					if((row['homePhoneB'] != '' && typeof(row['homePhoneB']) != 'undefined' &&  row['homePhoneB'] != null)){	
-						$("#detailsPageListView").append("<li class='sublist'><span><a onclick='callMsgPopup(this);'>"+row['homePhoneB']+"</a></span><span class='smallfonts'>(home)</span></li>");
+					if ((row['homePhoneB'] != '' && typeof(row['homePhoneB']) != 'undefined' && row['homePhoneB'] != null)) {
+						$("#detailsPageListView").append("<li class='sublist'><span><a onclick='callMsgPopup(this);'>" + row['homePhoneB'] + "</a></span><span class='smallfonts'>(home)</span></li>");
 					}
 
-					if((row['emergencyPhoneA'] != '' && typeof(row['emergencyPhoneA']) != 'undefined' &&  row['emergencyPhoneA'] != null)){	
-						$("#detailsPageListView").append("<li class='sublist'><span><a onclick='callMsgPopup(this);'>"+row['emergencyPhoneA']+"</a></span><span class='smallfonts'>(emergency)</span></li>");
+					if ((row['emergencyPhoneA'] != '' && typeof(row['emergencyPhoneA']) != 'undefined' && row['emergencyPhoneA'] != null)) {
+						$("#detailsPageListView").append("<li class='sublist'><span><a onclick='callMsgPopup(this);'>" + row['emergencyPhoneA'] + "</a></span><span class='smallfonts'>(emergency)</span></li>");
 					}
 
-					if((row['emergencyPhoneB'] != '' && typeof(row['emergencyPhoneB']) != 'undefined' &&  row['emergencyPhoneB'] != null)){	
-						$("#detailsPageListView").append("<li class='sublist'><span><a onclick='callMsgPopup(this);'>"+row['emergencyPhoneB']+"</a></span><span class='smallfonts'>(emergency)</span></li>");
+					if ((row['emergencyPhoneB'] != '' && typeof(row['emergencyPhoneB']) != 'undefined' && row['emergencyPhoneB'] != null)) {
+						$("#detailsPageListView").append("<li class='sublist'><span><a onclick='callMsgPopup(this);'>" + row['emergencyPhoneB'] + "</a></span><span class='smallfonts'>(emergency)</span></li>");
 					}
 					/*Populate Mobile Numbers Finished*/
 
-					if((row['bloodGroup'] != '' && typeof(row['bloodGroup']) != 'undefined' &&  row['bloodGroup'] != null)){
-						$("#detailsPageListView").append("<li>Blood Group:&nbsp;&nbsp;<span>"+row['bloodGroup']+"</span>");
+					if ((row['bloodGroup'] != '' && typeof(row['bloodGroup']) != 'undefined' && row['bloodGroup'] != null)) {
+						$("#detailsPageListView").append("<li>Blood Group:&nbsp;&nbsp;<span>" + row['bloodGroup'] + "</span>");
 					}
 
-					if((row['birthDay'] != '' && typeof(row['birthDay']) != 'undefined' &&  row['bloodGroup'] != null)){
-						$("#detailsPageListView").append("<li>Birth Day:&nbsp;&nbsp;<span>"+row['birthDay']+"</span>");
+					if ((row['birthDay'] != '' && typeof(row['birthDay']) != 'undefined' && row['bloodGroup'] != null)) {
+						$("#detailsPageListView").append("<li>Birth Day:&nbsp;&nbsp;<span>" + row['birthDay'] + "</span>");
 					}
-					image=row["image"];
+					image = row["image"];
 					$('#saveButton').addClass('item_hidden');
 					$('#detailsPageOption').removeClass('item_hidden');
 					$('#detailsPageTable').addClass('item_hidden');
@@ -309,7 +353,7 @@ function editDetails() {
 					$("#dataBloodGroup").html('<input class="editdata" type="text" id="editDataBloodGroup" value="' + row["bloodGroup"] + '">');
 					$("#dataBirthDay").html('<input class="editdata" type="text" id="editDataBirthDay" value="' + row["birthDay"] + '">');
 					$('#detailsPage').trigger('create');
-					img = row["image"];
+
 					$('#detailsPageTable').removeClass('item_hidden');
 					$('#detailsPageListView').addClass('item_hidden');
 					$('#cancelButton').removeClass('item_hidden');
@@ -317,22 +361,21 @@ function editDetails() {
 					$("#detailsPagePanel").panel("close");
 					$('#saveButton').removeClass('item_hidden');
 					$('#detailsPageOption').addClass('item_hidden');
-					$( "#editDataCountry" ).autocomplete({
-			  			source: countries
+					$("#editDataCountry").autocomplete({
+						source: countries
 					});
 				}
 			);
 		}
 	);
 }
-
 //Function Save edited Data
 function saveEditedData() {
 	var personalEmailBool = isEmail($("#editDataPersonalEmail").val()) || $("#editDataPersonalEmail").val() == '';
 	var officialEmailBool = isEmail($("#editDataOfficialEmail").val()) || $("#editDataOfficialEmail").val() == '';
-	if($("#editDataFirstName").val()!=''){
-		if(($("#editDataMobilePhoneA").val() != '' || $("#editDataMobilePhoneB").val() != '' || $("#editDataHomePhoneA").val() != '' || $("#editDataHomePhoneB").val() != '' || $("#editDataEmergencyPhoneA").val() != ''|| $("#editDataEmergencyPhoneB").val() != '')){
-			if( personalEmailBool && officialEmailBool){
+	if ($("#editDataFirstName").val() != '') {
+		if (($("#editDataMobilePhoneA").val() != '' || $("#editDataMobilePhoneB").val() != '' || $("#editDataHomePhoneA").val() != '' || $("#editDataHomePhoneB").val() != '' || $("#editDataEmergencyPhoneA").val() != '' || $("#editDataEmergencyPhoneB").val() != '')) {
+			if (personalEmailBool && officialEmailBool) {
 				firstName = $("#editDataFirstName").val();
 				middleName = $("#editDataMiddleName").val();
 				lastName = $("#editDataLastName").val();
@@ -367,25 +410,32 @@ function saveEditedData() {
 	}
 }
 
-//CLear Local Data
-function clearLocalData() {
+//Resync Function
+function reSync(){
 	$("#inputPasswordPopup").popup("open");
 	$("#password").val('');
-	$("#passwordBtn").on("tap",function(){	
-		if(verifyPassword($("#password").val())){
-			db.transaction(function(tx) {
-				tx.executeSql('DROP TABLE IF EXISTS INFO');
-			});
-			createTable();
-			localStorage.lastSynced = '0001-01-01 00:00:00';
-			$("#indexPagePanel").panel("close");
-			populateContactList();
-			$("#inputPasswordPopup").popup("close");
-			alert("Local data cleared");
+	$('#passwordBtn').off("click");
+	$("#passwordBtn").on("click", function() {
+		if (verifyPassword($("#password").val())) {
+			clearDataBool = true;
+			syncWithServer();
 		} else {
-			alert("Sorry password doesn't match")
+			alert("Sorry password doesn't match");
 		}
+
 	});
+}
+
+//CLear Local Data
+function clearLocalData() {
+	db.transaction(function(tx) {
+		tx.executeSql('DROP TABLE IF EXISTS INFO');
+	});
+	createTable();
+	localStorage.lastSynced = '0001-01-01 00:00:00';
+	$("#indexPagePanel").panel("close");
+	populateContactList();
+	$("#inputPasswordPopup").popup("close");
 }
 
 //function callIndexPage
@@ -441,13 +491,15 @@ function onConfirm(buttonIndex) {
 
 /*Sync With Server to Sent new Datas and receive new Datas*/
 function syncWithServer() {
-	if(navigator.network.connection.type != 'none')
+	if (navigator.network.connection.type != 'none'){	
+		
 		deletableIds = [];
 		db.transaction(
 			function(tx) {
 				tx.executeSql("SELECT * FROM INFO WHERE dateCreated > Datetime('" + localStorage.lastSynced + "') OR dateModified > Datetime('" + localStorage.lastSynced + "')", [], processNewData, errorCB);
 			}
 		);
+	}
 }
 
 function processNewData(tx, results) {
@@ -464,6 +516,7 @@ function processNewData(tx, results) {
 		var row = results.rows.item(i);
 		if (row["dateModified"] != null) {
 			if (row["dateDeleted"] != null) {
+				/*alert("deleted");*/
 				sentData.deleted[row["localId"]] = {
 					serverId: row["serverId"],
 					firstName: row["firstName"],
@@ -488,8 +541,8 @@ function processNewData(tx, results) {
 					dateDeleted: row["dateDeleted"]
 				};
 				deletableIds.push(row["localId"]);
-			} 
-			else {
+			} else {
+				/*alert("modified");*/
 				sentData.modified[row["localId"]] = {
 					serverId: row["serverId"],
 					firstName: row["firstName"],
@@ -514,7 +567,7 @@ function processNewData(tx, results) {
 				};
 			}
 		} else {
-			// alert("insert into db");
+			/*alert("insert");*/
 			sentData.created[row["localId"]] = {
 				serverId: row["serverId"],
 				firstName: row["firstName"],
@@ -539,37 +592,50 @@ function processNewData(tx, results) {
 			};
 		}
 	}
-	navigator.notification.activityStart("", "Connecting to Server");
+	var navigatorFlag = false;
+	if(!navigatorFlag){
+		navigator.notification.activityStart("", "Connecting to Server");
+		navigatorFlag = true;
+	}
 	$.ajax({
 		url: server + 'transations.php',
 		type: 'POST',
 		async: false,
 		data: sentData,
 		success: function(response) {
-			$.each(deletableIds, function(index,value){
-				db.transaction(function(tx) {
-					tx.executeSql("DELETE FROM INFO WHERE localId=" + value);
+			if(clearDataBool){
+				// alert("clear");
+				clearLocalData();
+				clearDataBool = false;
+				syncWithServer();
+			} else {
+				// alert("sync");
+				$.each(deletableIds, function(index, value) {
+					db.transaction(function(tx) {
+						tx.executeSql("DELETE FROM INFO WHERE localId=" + value);
+					});
 				});
-			});
-			response = JSON.parse(response);
-			insert(response);
-			var now = new Date();
-			// alert("server date= "+ response.datetime);
-			// alert("local time= "+now);
+				response = JSON.parse(response);
+				insert(response);
+				var now = new Date();
+				// alert("server date= "+ response.datetime);
+				// alert("local time= "+now);
 
-			var serverDate = response.datetime;
-			//alert(serverDate + " /n " +getCurrentDateTime()+ " /n "+now);
-			localStorage.timeDiff = now - new Date(parseInt(serverDate.substring(0, 4)),
-				parseInt(serverDate.substring(5, 7)) - 1,
-				parseInt(serverDate.substring(8, 10)),
-				parseInt(serverDate.substring(11, 13)),
-				parseInt(serverDate.substring(14, 16)),
-				parseInt(serverDate.substring(17)));
-			// alert("Time Diff= "+localStorage.timeDiff);
-			localStorage.lastSynced = serverDate;
-			populateContactList();
-			$("#indexPagePanel").panel("close");
-			navigator.notification.activityStop();
+				var serverDate = response.datetime;
+				//alert(serverDate + " /n " +getCurrentDateTime()+ " /n "+now);
+				localStorage.timeDiff = now - new Date(parseInt(serverDate.substring(0, 4)),
+					parseInt(serverDate.substring(5, 7)) - 1,
+					parseInt(serverDate.substring(8, 10)),
+					parseInt(serverDate.substring(11, 13)),
+					parseInt(serverDate.substring(14, 16)),
+					parseInt(serverDate.substring(17)));
+				// alert("Time Diff= "+localStorage.timeDiff);
+				localStorage.lastSynced = serverDate;
+				populateContactList();
+				$("#indexPagePanel").panel("close");
+				navigator.notification.activityStop();
+			}
+
 		},
 		error: function(xhr, error) {
 			alert("Could Not Connect to Server");
@@ -578,10 +644,10 @@ function processNewData(tx, results) {
 			navigator.notification.activityStop();
 		}
 	});
-		//navigator.notification.activityStop();
+	//navigator.notification.activityStop();
 }
 
-function insert(response){
+function insert(response) {
 	db.transaction(function(tx) {
 		$.each(response, function(index) {
 			if (index == 'serverId') {
@@ -610,7 +676,7 @@ function insert(response){
 											// alert("sfd");
 										} else {
 											// alert("empty");
-											tx.executeSql('INSERT INTO INFO (firstName,middleName,lastName,address,country,projectGroup,officialEmail,personalEmail,mobilePhoneA,mobilePhoneB,homePhoneA,homePhoneB,emergencyPhoneA,emergencyPhoneB,bloodGroup,birthDay,dateCreated,dateModified,image) VALUES ("' + response.news[index].firstName + '","' + response.news[index].middleName + '","' + response.news[index].lastName + '","' + response.news[index].address + '","' + response.news[index].country + '","' + response.news[index].projectGroup + '","' + response.news[index].officialEmail + '","' + response.news[index].personalEmail + '","' + response.news[index].mobilePhoneA + '","' + response.news[index].mobilePhoneB + '","' + response.news[index].homePhoneA + '","' + response.news[index].homePhoneB + '","' + response.news[index].emergencyPhoneA + '","' + response.news[index].emergencyPhoneB + '","' + response.news[index].bloodGroup + '","' + response.news[index].birthDay + '","' + response.news[index].dateCreated + '","' + response.news[index].dateModified + '","' + response.news[index].image + '")');
+											tx.executeSql('INSERT INTO INFO (serverId,firstName,middleName,lastName,address,country,projectGroup,officialEmail,personalEmail,mobilePhoneA,mobilePhoneB,homePhoneA,homePhoneB,emergencyPhoneA,emergencyPhoneB,bloodGroup,birthDay,dateCreated,dateModified,image) VALUES ("'+index+'","' + response.news[index].firstName + '","' + response.news[index].middleName + '","' + response.news[index].lastName + '","' + response.news[index].address + '","' + response.news[index].country + '","' + response.news[index].projectGroup + '","' + response.news[index].officialEmail + '","' + response.news[index].personalEmail + '","' + response.news[index].mobilePhoneA + '","' + response.news[index].mobilePhoneB + '","' + response.news[index].homePhoneA + '","' + response.news[index].homePhoneB + '","' + response.news[index].emergencyPhoneA + '","' + response.news[index].emergencyPhoneB + '","' + response.news[index].bloodGroup + '","' + response.news[index].birthDay + '","' + response.news[index].dateCreated + '","' + response.news[index].dateModified + '","' + response.news[index].image + '")');
 										}
 									}
 								);
@@ -629,95 +695,174 @@ function insert(response){
 /*Sync With Server Finished*/
 
 /*Show Call Message Popup Function*/
-function callMsgPopup(obj){
-	var phoneNumber = $(obj).html().replace ( /[^\d.]/g, '' );
-	$('#callMsgDialog > .ui-grid-a > .ui-block-a').html('<a href="tel:'+phoneNumber+'"><img src="images/phoneicon.png" class="leftimg" /></a>');
-	$('#callMsgDialog > .ui-grid-a > .ui-block-b').html('<a href="sms:'+phoneNumber+'"><img src="images/message.png" class="rightimg" /></a>');
+function callMsgPopup(obj) {
+	var phoneNumber = $(obj).html().replace(/[^\d.]/g, '');
+	$('#callMsgDialog > .ui-grid-a > .ui-block-a').html('<a href="tel:' + phoneNumber + '"><img src="images/phoneicon.png" class="leftimg" /></a>');
+	$('#callMsgDialog > .ui-grid-a > .ui-block-b').html('<a href="sms:' + phoneNumber + '"><img src="images/message.png" class="rightimg" /></a>');
 	$('#callMsgDialog').trigger('create');
 	$('#callMsgDialog').popup('open');
 }
 /*Show Call Message Popup Finished*/
 
 /*Choose Catagory Popup*/
-function catagoryButtonClick(){
+function catagoryButtonClick() {
 	$('#indexPagePanel').panel('close');
 	$('#chooseCatagory').popup('open');
 }
 
 /*Index page Popus's Select Country/Project Group*/
-function viewCounGrp(obj){
-	var projectGroups = [];
-	var countries = [];
+function viewCounGrp() {
+	projectGroups = [];
+	countries = [];
 
-	db.transaction(function(tx){
-		tx.executeSql("SELECT * FROM INFO WHERE dateDeleted IS NULL",[],function(tx,results){
+	db.transaction(function(tx) {
+		tx.executeSql("SELECT * FROM INFO WHERE dateDeleted IS NULL", [], function(tx, results) {
 			var len = results.rows.length;
 			for (var i = 0; i < len; i++) {
 				var row = results.rows.item(i);
 				var projectGroupFound = false;
 				var countryFound = false;
-				$.each( projectGroups, function( index, value ){
-				  if(row["projectGroup"].toString().toUpperCase() == value.toString().toUpperCase()){
-				  	projectGroupFound = true;
-				  	return false;
-				  }
+				$.each(projectGroups, function(index, value) {
+					if (row["projectGroup"].toString().toUpperCase() == value.toString().toUpperCase()) {
+						projectGroupFound = true;
+						return false;
+					}
 				});
-				$.each( countries, function( index, value ){
-				  if(row["country"].toString().toUpperCase() == value.toString().toUpperCase()){
-				  	countryFound = true;
-				  	return false;
-				  }
+				$.each(countries, function(index, value) {
+					if (row["country"].toString().toUpperCase() == value.toString().toUpperCase()) {
+						countryFound = true;
+						return false;
+					}
 				});
-				if(!projectGroupFound)
+				if (!projectGroupFound)
 					projectGroups.push(row["projectGroup"]);
-				if(!countryFound){
+				if (!countryFound) {
 					countries.push(row["country"]);
 				}
 			}
 		});
-	},errorCB , populateCatagoryList);
-	
-	function populateCatagoryList(){
+	}, errorCB, populateFilterPopup);
+
+	/*function populateCatagoryList() {
 		var id = $(obj).attr("id");
 		projectGroups.sort();
 		countries.sort();
 		$("#catagoryPageListview").html("");
-		if(id == 'chooseByPGroup'){
-			$.each(projectGroups, function(index,value){
-				if(value == "")
-					$("#catagoryPageListview").append("<li><input type='hidden' value='"+value+"'/><a id='notSpecifiedGroup' onclick='populateSelectedData(this);'>Not Specified</a></li>");
+		if (id == 'chooseByPGroup') {
+			$.each(projectGroups, function(index, value) {
+				if (value == "")
+					$("#catagoryPageListview").append("<li><input type='hidden' value='" + value + "'/><a id='notSpecifiedGroup' onclick='populateSelectedData(this);'>Not Specified</a></li>");
 				else
-					$("#catagoryPageListview").append("<li><input type='hidden' value='"+value+"'/><a id=projectGroup"+index+" onclick='populateSelectedData(this);'>"+value+"</a></li>");
-			});			
-		} else if (id == 'chooseByCountry'){
-			$.each(countries, function(index,value){
-				if(value == "")
-					$("#catagoryPageListview").append("<li><input type='hidden' value='"+value+"'/><a id='notSpecifiedCountry' onclick='populateSelectedData(this);'>Not Specified</a></li>");
+					$("#catagoryPageListview").append("<li><input type='hidden' value='" + value + "'/><a id=projectGroup" + index + " onclick='populateSelectedData(this);'>" + value + "</a></li>");
+			});
+		} else if (id == 'chooseByCountry') {
+			$.each(countries, function(index, value) {
+				if (value == "")
+					$("#catagoryPageListview").append("<li><input type='hidden' value='" + value + "'/><a id='notSpecifiedCountry' onclick='populateSelectedData(this);'>Not Specified</a></li>");
 				else
-					$("#catagoryPageListview").append("<li><input type='hidden' value='"+value+"'/><a id=Country"+index+" onclick='populateSelectedData(this);'>"+value+"</a></li>");
-			});	
+					$("#catagoryPageListview").append("<li><input type='hidden' value='" + value + "'/><a id=Country" + index + " onclick='populateSelectedData(this);'>" + value + "</a></li>");
+			});
 		}
-		$.mobile.changePage("#catagoryPage", {transition:"slide"});
+		$.mobile.changePage("#catagoryPage", {
+			transition: "slide"
+		});
 		$("#catagoryPageListview").listview("refresh");
-	}
+	}*/
 }
 /*Popualate Selected Data Function*/
-function populateSelectedData(obj){
+function populateSelectedData(obj) {
 	populateContactList(obj);
 	$.mobile.changePage("#index");
 }
 /*Populate Selected Data Finished*/
 
 /*Verify Password Function*/
-function verifyPassword(pass){
-	if(pass === PASSWORD)
+function verifyPassword(pass) {
+	if (pass === PASSWORD)
 		return true;
 	else
 		return false;
-} 
+}
 
 /*Validate Email*/
 function isEmail(email) {
-  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-  return regex.test(email);
+	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	return regex.test(email);
+}
+
+/*Populate Filter Popup*/
+function populateFilterPopup() {
+	projectGroups.sort();
+	countries.sort();
+	
+	
+	if(projectGroups.length > 0){
+		$("#groupsContainer").html("<select name='groups' id='groups'></select>");
+		if(checkedGroup == "none"){
+			$("#groups").append("<option id='none' value='notDefined'>Country not selected</option>");
+		}
+		$.each(projectGroups, function(index, value) {
+			if (value == ""){
+				$("#groups").append("<option id='notSpecifiedGroup' value=''>Not Specified</option>");
+			}else{
+				$("#groups").append("<option id='projectGroup"+index+"' value='"+value+"'>"+value+"</option>");
+			}
+		});
+	}
+	if(countries.length > 0){
+		$("#countryContainer").html("<select name='country' id='country'></select>");
+		if(checkedCountry == "none"){
+			$("#country").append("<option id='none' value='notDefined'>Group not selected</option>");
+		}
+		$.each(countries, function(index, value) {
+			if (value == "")
+				$("#country").append("<option id='notSpecifiedCountry' value=''>Not Specified</option>");
+			else
+				$("#country").append("<option id='country"+index+"' value='"+value+"'>"+value+"</option>")
+		});
+	}
+	$.each($("select[name=groups] option"),function(){
+		if($(this).attr("id") == checkedGroup){
+			$("#groups").val($(this).val());
+		}
+	});
+	$.each($("select[name=country] option"),function(){
+		if($(this).attr("id") == checkedCountry){
+			$("#country").val($(this).val());
+		}
+	});
+	$("#indexPagePanel").panel("close");
+	$('#indexPageFilterPopup').popup('open');
+	$("#indexPageFilterPopup").trigger("create");
+}
+
+/*Show all Function*/
+
+function showAll(){
+	populateContactList();
+	$(".ui-popup").popup("close");
+
+}
+
+/*Show filetered data*/
+function showFilteredData(){
+	$.each($("select[name=groups] option"),function(){
+		if($(this).is(':selected')){
+			filterGroupName = $(this).val();
+			checkedGroup = $(this).attr("id");
+		}
+
+	});
+	$.each($("select[name=country] option"),function(){
+		if($(this).is(':selected')){
+			filterCountryName = $(this).val();
+			checkedCountry = $(this).attr("id");
+		}
+
+	});
+
+	var obj = {"filterGroupName":filterGroupName,"filterCountryName":filterCountryName};
+	populateContactList(obj);
+	$(".ui-popup").popup("close");
+
 }

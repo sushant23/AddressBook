@@ -1,7 +1,8 @@
 function importFromFile() {
     $("#inputPasswordPopup").popup("open");
     $("#password").val('');
-    $("#passwordBtn").on("tap",function(){    
+    $('#passwordBtn').off("click");
+    $("#passwordBtn").on("click",function(){    
         if(verifyPassword($("#password").val())){
             navigator.camera.getPicture(uploadPhoto,
                 function(message) {}, {
@@ -21,6 +22,7 @@ function importFromFile() {
         };
         options.fileKey = "file";
         options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1);
+        
         options.mimeType = "text/csv";
 
         var params = {};

@@ -1,0 +1,64 @@
+8
+
+dir
+2911
+svn://kathmandu/ProcitDevProjects/AddressBookProject/AddressBookApp/assets/www/plugins/org.apache.cordova.camera/www
+svn://kathmandu/ProcitDevProjects
+
+
+
+2014-04-10T12:12:48.691359Z
+2911
+bkshrestha
+
+
+svn:special svn:externals svn:needs-lock
+
+CameraConstants.js
+file
+
+
+
+
+2014-04-10T09:11:53.656250Z
+1500d85304e0d6b7850027e44e535746
+2014-04-10T12:12:48.691359Z
+2911
+bkshrestha
+
+Camera.js
+file
+
+
+
+
+2014-04-10T09:11:53.656250Z
+8f04c6125730b4e932b91cc3826670bf
+2014-04-10T12:12:48.691359Z
+2911
+bkshrestha
+
+CameraPopoverOptions.js
+file
+
+
+
+
+2014-04-10T09:11:53.656250Z
+4e2ced3f0f57f4031f9795ab6b98fd36
+2014-04-10T12:12:48.691359Z
+2911
+bkshrestha
+
+CameraPopoverHandle.js
+file
+
+
+
+
+2014-04-10T09:11:53.656250Z
+2f6931c2e5bced66f05299da13d4d5d7
+2014-04-10T12:12:48.691359Z
+2911
+bkshrestha
+

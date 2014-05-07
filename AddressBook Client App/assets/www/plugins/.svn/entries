@@ -1,0 +1,31 @@
+8
+
+dir
+2911
+svn://kathmandu/ProcitDevProjects/AddressBookProject/AddressBookApp/assets/www/plugins
+svn://kathmandu/ProcitDevProjects
+
+
+
+2014-04-10T12:12:48.691359Z
+2911
+bkshrestha
+
+
+svn:special svn:externals svn:needs-lock
+
+org.apache.cordova.file
+dir
+
+org.apache.cordova.file-transfer
+dir
+
+org.apache.cordova.dialogs
+dir
+
+org.apache.cordova.camera
+dir
+
+org.apache.cordova.network-information
+dir
+

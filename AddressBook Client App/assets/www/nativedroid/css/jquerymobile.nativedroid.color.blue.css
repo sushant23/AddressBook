@@ -12,31 +12,31 @@
 
 
 .ui-bar-b,.ui-body-b .ui-dialog-contain .ui-title {
-	border-bottom: 2px solid #2121FF;
+	border-bottom: 2px solid #808080;
 }
 
 .ui-btn-down-b .ui-btn-inner,.ui-btn-down-b .ui-btn-text .ui-link-inherit,.ui-listview .ui-btn-hover-b,.ui-input-search.ui-body-b {
-	background-color: #2121FF;
+	background-color: #808080;
 }
 
 .ui-body-b form .ui-btn-down-b,.ui-body-b form .ui-mini.ui-checkbox-on,.ui-body-b form .ui-mini.ui-radio-on {
-	background-color: #2121FF;
+	background-color: #808080;
 }
 
-.ui-body-b div.ui-input-text.ui-focus:after{background-color: #33B5E5;}
-.ui-body-b div.ui-input-text.ui-focus:before{background-color: #33B5E5;}
-.ui-body-b div.ui-input-text.ui-focus {border-bottom: 1px solid #33B5E5;}
+.ui-body-b div.ui-input-text.ui-focus:after{background-color: #353535;}
+.ui-body-b div.ui-input-text.ui-focus:before{background-color: #353535;}
+.ui-body-b div.ui-input-text.ui-focus {border-bottom: 1px solid #353535;}
 
 textarea.ui-body-b.ui-input-text:focus {
-	border: 1px solid #2121FF;
+	border: 1px solid #808080;
 }
 
 .ui-body-b .ui-link,.ui-body-b .ui-li a,.nativeDroidCards ul[data-nativedroid-plugin="twitter"] a {
-	color: #2121FF;
+	color: #808080;
 }
 
 .ui-body-b .table-stroke tr:nth-child(even) .ui-link {
-	color: #2121FF;
+	color: #808080;
 }
 
 .ui-slider-track .ui-btn.ui-slider-handle {
@@ -49,13 +49,13 @@ textarea.ui-body-b.ui-input-text:focus {
 }
 
 .ui-slider-bg.ui-btn-active {
-	background-color: #2121FF;
+	background-color: #808080;
 }
 
 progress::-webkit-progress-value {
-	background-color: #2121FF;
+	background-color: #808080;
 }
 
 progress::-moz-progress-bar {
-	background-color: #2121FF;
+	background-color: #808080;
 }

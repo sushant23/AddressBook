@@ -38,21 +38,53 @@
 
 /*Custom Index Page ListView*/
 .contactListCountryFlag{
+	float:right;
 	display: inline !important;
 	vertical-align: baseline; 
 	padding-left: 5px;
-	height: 20px;
+	height: 30px;
 	padding-top: 0 !important;
 	padding-bottom: 0 !important;
+}
+.contactListImage{
+	max-height: 100%;
+}
+.per90block{
+	width: 90% !important;
+}
+.per10block{
+	width: 10% !important;
+}
+.per35block{
+	width: 25% !important;
+}
+.per65block{
+	width: 75% !important;
+}
+.indexPageNameContainer{
+	overflow: hidden;
+	text-overflow:ellipsis;
+}
+#contactList .ui-block-a,#contactList .ui-block-b{
+	height: 70px;
+}
+#contactList .ui-block-b{
+	padding-left: 10px;
+}
+.phoneIconIndexPage{
+	height: 25px;
+	padding-left: 10px;
+}
+.indexPageImageContainer{
+	overflow: hidden;
 }
 /*Custom Index Page ListView Finished*/
 
 /* Custom Header */
 .ui-header .ui-title{
 	position:relative;
-	text-align:center;
 	margin:0;
-	line-height:80px;
+	line-height:50px;
 }
 
 .ui-header .right-btn{
@@ -83,6 +115,10 @@
 
 .ui-header h5{
 	text-align: left !important;
+}
+
+#index .ui-header .ui-title {
+	padding-left: 20px;
 }
 #nameHeader{
 	display: inline-block;
@@ -161,6 +197,9 @@
 /*Custom Icons Index Page Panel Finished*/
 
 /*Custom DetailsPage Table*/
+#detailsImageDiv{
+	margin: auto;
+}
 #detailsPageTable{
 	width: 100%;
 }
@@ -225,8 +264,9 @@
 	height:50px;
 }
 
-#callMsgDialog{
-	border-radius: 20px;
+#callMsgDialog h1{
+	font-size: 25px;
+	border-bottom: 2px solid;
 }
 /*Custom Popup Message For Call and Message Finished*/
 
@@ -235,13 +275,19 @@
 	padding-left: 30px !important;
 }
 
+.ui-li-heading{
+	width: 50%;
+	text-overflow:ellipsis;
+}
+
+
 /*Custom Details Page ListView Finished*/
 
 /*Custom Overlay On image*/
 .imagebefore{
 	position:relative;
-    width:200px;
-    height:200px;
+    width:50%;
+    height:auto;
     overflow: hidden;
 }
 .imagebefore img {
@@ -277,8 +323,8 @@
 
 .image {
     position:relative;
-    width:200px;
-    height:200px;
+    width:50%;
+    height:auto;
 }
 .image img {
     width:100%;
@@ -314,9 +360,14 @@
 /*Custom Ui Panel*/
 .ui-panel {
 	min-height: 5%;
-	width: 70%%;
 	z-index: 500;
 	position: fixed;
+	width: 70%;
+}
+
+.ui-panel .ui-link-inherit {
+	font-size: 16px;
+	padding: 5px !important;
 }
 
 /*Custom AutoComplete*/
@@ -348,11 +399,81 @@
 	-o-transition-property: none !important;
 }
 /*Fixed Header Finished*/
-
 /*Custom Detail page flag*/
 #detailsPageFlag{
 	height: 1.5em;
 	vertical-align: middle;
 	float:right;
 }
+/*Custom Choose Catagory*/
+#chooseCatagory{
+	width: 100%;
+	height: 100%;
+}
+#chooseCatagory * {
+	font-size: 20px;
+}
+#chooseCatagory-popup{
+	position: fixed;
+	left: 0;
+	width: 100%;
+}
+#chooseCatagory h1{
+	text-align: center;
+}
 
+#chooseCatagory .ui-grid-a{
+	height: 100%;
+	overflow: visible;
+}
+#chooseCatagory *{
+	overflow: visible;
+}
+/*Custom Choose Catagory Finished*/
+
+/*Custom index page call, message, email Popup*/
+#indexPageCMM-popup{
+	position: fixed;
+}
+#indexPageCMM img{
+	height: 40px;
+}
+
+#indexPageCMM .ui-block-a, #indexPageCMM .ui-block-b, #indexPageCMM .ui-block-c{
+	text-align: center;
+}
+#indexPageCMM h1{
+	font-size: 25px;
+	border-bottom: 2px solid;
+}
+/*Custom index page call, message, email Popup Finished*/
+
+/*Custom index page filter popup*/
+#indexPageFilterPopup .ui-block-a, #indexPageFilterPopup .ui-block-b{
+	text-align: center;
+}
+
+#indexPageFilterPopup-popup{
+	left:0 important;
+	width:100%;
+	max-width: 999999;
+}
+
+.ui-select .ui-btn{
+	text-align: left;
+}
+
+#indexPageFilterPopup .ui-btn{
+	border:2px solid #8B8881;
+	border-radius: 10px;
+	background-color: rgba(150,150,150,0.1);
+}
+#indexPageFilterPopup h1{
+	border-bottom: 2px solid;
+}
+/*Custom index page filter popup finished*/
+
+/*Common Elements*/
+.leftaligned{
+	text-align: left ;
+}

@@ -34,15 +34,61 @@
             <div data-role="panel" id="indexPagePanel" data-theme="b" data-position="right" data-display="overlay" data-animate="false">
                 <ul data-role="listview">
                     <li data-icon="customadd" ><a href="#addPage">Add</a></li>
-                    <li data-icon="customviewall" id="showAllContacts" class="item_hidden"><a onclick="populateContactList();">Show All Contacts</a></li>
-                    <li data-icon="customviewbycatagory"><a onclick="catagoryButtonClick();">View By Catagory</a></li>
-                    <li data-icon="customsync" id="syncButton"><a href="#" onclick="syncWithServer();">Resync</a></li>
-                    <li data-icon="customclearlocaldata"><a href="#" onclick="clearLocalData();">Clear Local Data</a></li>
-                    <li data-icon="customimportfile" id='importFileButton'><a href="#" onclick="importFromFile();">Import File</a></li>
+                    <!-- <li data-icon="customviewall" id="showAllContacts" class="item_hidden"><a onclick="populateContactList();">Show All Contacts</a></li> -->
+                    <li data-icon="customviewbycatagory"><a onclick="viewCounGrp();">Filter</a></li>
+                    <li data-icon="customsync" id="syncButton"><a href="#" onclick="reSync();">Resync</a></li>
+                    <!-- <li data-icon="customclearlocaldata"><a href="#" onclick="clearLocalData();">Clear Local Data</a></li> -->
+                    <li data-icon="customimportfile" id='importFileButton'><a href="#" onclick="importFromFile();">Upload csv File</a></li>
                 </ul>
             </div>
             <!-- Index Page Panel Finished -->
-
+            <!-- Index page filter popup -->
+            <div data-role="popup" id="indexPageFilterPopup" data-theme="b">
+                <div data-role="content" data-theme="b">
+                    <h1>Filter</h1>
+                    <table width="100%">
+                        <tr>    
+                            <td class="leftaligned">
+                                <label for="groupsContainer">Group</label>
+                            </td>
+                            <td class="leftaligned">
+                                <div id="groupsContainer">
+                                    
+                                </div>
+                            </td>
+                        <tr>
+                            <td class="leftaligned">
+                                <label for="countryContainer">Country</label>
+                            </td>
+                            <td class="leftaligned">
+                                <div id="countryContainer">
+                                   
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="ui-grid-a" data-theme="b">  
+                        <div class="ui-block-a" data-theme="b">  
+                            <div data-role="button" onClick="showFilteredData();">OK</div>
+                        </div>
+                        <div class="ui-block-b" data-theme="b">  
+                            <div data-role="button" onclick="showAll();">Show All</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Index page popup finished -->
+            <!-- Index page Call or Message , Email Dialog -->
+                <div data-role="popup" id="indexPageCMM" class="ui-corner-all">
+                    <h1>Choose Option</h1>
+                    <div class="ui-grid-b">
+                        <div class="ui-block-a"></div>
+                        <div class="ui-block-b"></div>
+                        <div class="ui-block-c"></div>
+                    </div>
+                </div>
+            <!-- Index page Call or Message , Email Dialog Finished -->
+            
             <!-- Index Page Header -->
             <div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
             
@@ -65,17 +111,7 @@
             
             <!-- Index Page Content -->
             <div data-role="content">
-                <!-- Index Page Choose Catagory Popup -->
-                <div data-role="popup" id="chooseCatagory" class="ui-corner-all">
-                    <h1><strong>Choose Catagory</strong></h1>
-                    <div data-role="navbar">
-                        <ul>
-                            <li><a href="#" id = "chooseByPGroup" onclick="viewCounGrp(this);" data-icon="group">Groups</a></li>
-                            <li><a href="#" id = "chooseByCountry" onclick="viewCounGrp(this);" data-icon="globe">Country</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- Index Page Choose Catogory Popup Finished -->
+                
                 
                 <!-- Index Page Input Password Popup -->
                 <div data-role="popup" id="inputPasswordPopup" class="ui-corner-all">
@@ -195,7 +231,7 @@
             <div data-role="content">
                 <!-- Call or Message Dialog -->
                 <div data-role="popup" id="callMsgDialog" class="ui-corner-all">
-                    <h1><strong>Choose Option</strong></h1>
+                    <h1>Choose Option</h1>
                     <div class="ui-grid-a">
                         <div class="ui-block-a"></div>
                         <div class="ui-block-b"></div>

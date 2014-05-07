@@ -1,0 +1,40 @@
+8
+
+dir
+2911
+svn://kathmandu/ProcitDevProjects/AddressBookProject/AddressBookApp/assets/www/plugins/org.apache.cordova.file-transfer/www
+svn://kathmandu/ProcitDevProjects
+
+
+
+2014-04-10T12:12:48.691359Z
+2911
+bkshrestha
+
+
+svn:special svn:externals svn:needs-lock
+
+FileTransfer.js
+file
+
+
+
+
+2014-04-10T09:11:53.718750Z
+091efca8d14e8490839310953512eebc
+2014-04-10T12:12:48.691359Z
+2911
+bkshrestha
+
+FileTransferError.js
+file
+
+
+
+
+2014-04-10T09:11:53.703125Z
+4de53c42bc85ddeb5089ea2f3ea5d8d9
+2014-04-10T12:12:48.691359Z
+2911
+bkshrestha
+
